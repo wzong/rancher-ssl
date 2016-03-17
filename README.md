@@ -1,5 +1,5 @@
 # rancher ssl
-If you find anything that seems to be broker or not working as described below please open an issue or a pull request. Thanks!
+If you find anything that seems to be broken or not working as described below please open an issue or a pull request. Thanks!
 
 This is a docker image to be able to run rancher with SSL using nginx and letsencrypt. All you need to do is the following steps:
 
