@@ -1,23 +1,21 @@
 FROM nginx
 
-RUN apt-get update \
-    && apt-get install -y git bc cron \
-    && rm -rf /var/lib/apt/lists/*
+RUN echo "deb http://ftp.debian.org/debian jessie-backports main" | tee -a /etc/apt/sources.list
 
-# get letsencrypt client for setup of certificate
-# will be replaced by native package when it is available.
-RUN git clone https://github.com/letsencrypt/letsencrypt /opt/letsencrypt
+RUN apt-get update \
+    && apt-get install -y bc cron \
+    && apt-get install -y letsencrypt -t jessie-backports \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/src
 WORKDIR /usr/src
 COPY . /usr/src
 
-# setup certificate renewal script.
-RUN chmod +x ./letsencrypt_renew.sh \
-    && touch /var/log/letsencrypt_renew.log \
-    && ln -sf /dev/stdout /var/log/letsencrypt_renew.log \
-    && chmod +x ./crontab.sh \
-    && crontab -u root crontab.sh \
-    && chmod +x ./start.sh
+RUN echo "0 12,6 * * * /usr/src/renew.sh" | tee -a /var/spool/cron/root \
+    && chmod +x /usr/src/renew.sh \
+    && chmod +x /usr/src/start.sh
+
+RUN /etc/init.d/cron start \
+    && update-rc.d cron defaults
 
 CMD ["/bin/sh", "-c", "./start.sh"]
