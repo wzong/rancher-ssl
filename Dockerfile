@@ -1,11 +1,8 @@
 FROM nginx
 
-RUN echo "deb http://ftp.debian.org/debian jessie-backports main" | tee -a /etc/apt/sources.list
-
-RUN apt-get update \
-    && apt-get install -y bc cron \
-    && apt-get install -y letsencrypt -t jessie-backports \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update
+RUN apt-get install -y bc cron certbot
+RUN rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/src
 WORKDIR /usr/src

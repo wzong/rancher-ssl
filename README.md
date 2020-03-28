@@ -5,7 +5,7 @@ This is a docker image to be able to run rancher with SSL using nginx and letsen
 
 - Setup a DNS a record for the domain you want to use so it points to the same node as you want to run this container on. Wait for it to be active.
 
-- Restart your rancher server container but **without** exposing the 8080 port and give it a name e.g. rancher-server
+- Restart your rancher server container but **without** exposing the 80 port and give it a name e.g. rancher-server
 
 - Start a rancher-ssl container by running one of the commands below.
 
@@ -18,7 +18,7 @@ sudo docker run --restart=always -p 80:80 -p 443:443 --link <rancher_name>:ranch
 ```bash
 # Specify a volume to store your certificates on the host. They will be stored when you remove the container etc.
 
-sudo docker run --restart=always -p 80:80 -p 443:443 -v <host_vol>:/etc/letsencrypt --link <rancher_name>:rancher-server --name rancher-ssl -d -e EMAIL=<your_email> -e DOMAIN=<your_domain> mckn/rancher-ssl
+sudo docker run --restart=always -p 80:80 -p 443:443 -v <host_vol>:/etc/letsencrypt --link <rancher_name>:rancher-server --name rancher-ssl -d -e EMAIL=<your_email> -e DOMAIN=<your_domain> wzong/rancher-ssl
 ```
 
 To inspect what your rancher-ssl container is doing run the follwing command:
